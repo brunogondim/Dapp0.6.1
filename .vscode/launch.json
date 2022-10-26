@@ -4,6 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+        {
+            "env": {
+                "ROLLUP_HTTP_SERVER_URL": "http://127.0.0.1:5004"
+            },
+            "cwd": "${workspaceFolder}/Linear_Regression",
+            "name": "Linear_Regression DApp",
+            "type": "python",
+            "request": "launch",
+            "python": "${workspaceFolder}/Linear_Regression/.env/bin/python3",
+            "program": "Linear_Regression.py",
+            "gevent": false,
+        },
         {
             "env": {
                 "ROLLUP_HTTP_SERVER_URL": "http://127.0.0.1:5004"
