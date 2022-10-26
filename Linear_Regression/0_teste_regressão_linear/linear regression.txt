@@ -1,0 +1,5 @@
+https://machinelearningmastery.com/implement-simple-linear-regression-scratch-python/
+
+https://integratedmlai.com/least-squares-math-to-pure-python-without-numpy-or-scipy/
+
+https://github.com/ThomIves/BasicLinearAlgebraToolsPurePy

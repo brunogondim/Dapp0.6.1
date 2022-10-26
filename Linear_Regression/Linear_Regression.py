@@ -11,12 +11,18 @@
 # specific language governing permissions and limitations under the License.
 
 from os import environ
+import sqlite3
 import traceback
 import logging
 import requests
+import datasets_sqlite
+import datasets_regressaoLinear
+
+# datasets_regressaoLinear.regressao()
 
 logging.basicConfig(level="INFO")
 logger = logging.getLogger(__name__)
+my_class = datasets_sqlite.Myclass()
 
 rollup_server = environ["ROLLUP_HTTP_SERVER_URL"]
 logger.info(f"HTTP rollup_server url is {rollup_server}")
@@ -41,7 +47,7 @@ def handle_advance(data):
 
     response = requests.post(rollup_server + "/notice", json={"payload": data["payload"]})
     logger.info(f"Received notice status {response.status_code} body {response.content}")
-
+    
     2. During processing, any exception must be handled accordingly:
 
     try:
@@ -66,16 +72,26 @@ def handle_advance(data):
 
     """
     The sample code from the Echo DApp simply generates a notice with the payload of the
-    request and print some log messages.
+    request and print some lo
+    g messages.
     """
 
     logger.info(f"Received advance request data {data}")
 
     status = "accept"
     try:
-        logger.info("Adding notice")
-        response = requests.post(rollup_server + "/notice", json={"payload": data["payload"]})
-        logger.info(f"Received notice status {response.status_code} body {response.content}")
+        #logger.info("Adding notice")
+        #response = requests.post(rollup_server + "/notice", json={"payload": data["payload"]})
+        #logger.info(f"Received notice status {response.status_code} body {response.content}")
+        
+        statement = hex2str(data["payload"])
+        if statement[0:14] == "generate_model": # 'generate_model;simulation'
+            my_class.generate_model(data,rollup_server,hex2str,str2hex)
+        elif statement[0:9] == "use_model": #'use_model;simulation;50;yes' age;smoker
+            values = statement.split(';')
+            my_class.use_model(data,rollup_server,hex2str,str2hex,*values)
+        else:
+            my_class.advance(data,rollup_server,hex2str,str2hex)
 
     except Exception as e:
         status = "reject"
@@ -109,12 +125,10 @@ while True:
         logger.info("No pending rollup request, trying again")
     else:
         rollup_request = response.json()
-        data = rollup_request["data"]
-        if "metadata" in data:
-            metadata = data["metadata"]
-            if metadata["epoch_index"] == 0 and metadata["input_index"] == 0:
-                rollup_address = metadata["msg_sender"]
-                logger.info(f"Captured rollup address: {rollup_address}")
-                continue
-        handler = handlers[rollup_request["request_type"]]
-        finish["status"] = handler(rollup_request["data"])
+        metadata = rollup_request["data"]["metadata"]
+        if metadata["epoch_index"] == 0 and metadata["input_index"] == 0:
+            rollup_address = metadata["msg_sender"]
+            logger.info(f"Captured rollup address: {rollup_address}")
+        else:
+            handler = handlers[rollup_request["request_type"]]
+            finish["status"] = handler(rollup_request["data"])
