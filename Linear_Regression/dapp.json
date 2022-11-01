@@ -1,5 +1,5 @@
 {
   "fs": {
-    "files": ["Linear_Regression.py", "entrypoint.sh", "datasets_model.py", "datasets_regressaoLinear.py", "datasets_sqlite.py", "datasets-test.sql", "Linear_Regression.py", "LinearAlgebraPurePython.py"]
+    "files": ["Linear_Regression.py", "entrypoint.sh", "datasets_model.py", "datasets_regressaoLinear.py", "datasets_sqlite.py", "datasets-test.sql", "Linear_Regression.py", "LinearAlgebraPurePython.py", "data.db"]
   }
 }
