@@ -85,7 +85,7 @@ def handle_advance(data):
         #logger.info(f"Received notice status {response.status_code} body {response.content}")
         
         statement = hex2str(data["payload"])
-        if statement[0:14] == "generate_model": # 'generate_model;simulation'
+        if statement[0:14] == "generate_model": # 'generate_model;simulation' or 'generate_model;linear_regression'
             my_class.generate_model(data,rollup_server,hex2str,str2hex)
         elif statement[0:9] == "use_model": #'use_model;simulation;50;yes' age;smoker
             values = statement.split(';')
